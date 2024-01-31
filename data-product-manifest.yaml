@@ -1,0 +1,65 @@
+version: 0.0.1
+jobId: "304"
+jobName: Distinct Test
+jobType: Source Aligned Data Product
+alias: load_data_to_mysql_for_distinct
+discoveryPort:
+  name: Distinct Test
+inputPorts:
+  - alias: Test_Data_Set_1
+    isDynamic: true
+    path: "##test_date##"
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: test
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Base S3 Connectivity
+      dataSetUrn: urn:dv:dataset:b26a1127-9bc2-42a5-aab7-d64bd20bf714
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: load_data_to_mysql_for_distinct
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      a:
+        type: STRING
+        description: ""
+  stateStoreType: saveTableDB
+  isProfilingEnabled: false
+  updateStrategy: Append
+  connection: Base S3 Connectivity
+  tableName: table1
+  optional:
+    persistDataFrame: false
+    addRunIdColumn: false
+    enableDataReconciliation: false
+    enforceSchema: false
+  refreshInterval: 0 10 31 2 1
+transformation:
+  - isDynamic: true
+    alias: Distinct_1
+    description: dist
+    sequenceNo: 2
+    inputDataFrame: Test_Data_Set_1
+    optional:
+      persistDataFrame: false
+    type: distinctDataFrame
+    sequence: 2
+controlPort:
+  dataQualityRules:
+    RecordCountCheck:
+      productState:
+        expression: ==
+        number: 10
+        owner: abc
+        stepsToFix: abc
+        referenceAlias: load_data_to_mysql_for_distinct
+outputPort:
+  subscriptionChannels:
+    - channelType: Postgres
+      queryType: SQL
+    - channelType: Dataproduct
+      queryType: SQL
