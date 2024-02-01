@@ -1,4 +1,4 @@
-version: 0.0.1
+version: 0.0.3
 jobId: "1"
 jobName: Select Columns Test
 jobType: Source Aligned Data Product
@@ -50,6 +50,251 @@ transformation:
       persistDataFrame: false
     type: selectColumns
     sequence: 2
+  - isDynamic: true
+    alias: Filter_1
+    description: filter step
+    sequenceNo: 3
+    inputDataFrame: Select_Columns_1
+    filterCondition: condition
+    isConditionAsJsonString: false
+    optional:
+      persistDataFrame: false
+    type: filterTransform
+    sequence: 3
+  - isDynamic: true
+    alias: Rename_Columns_1
+    description: rename
+    sequenceNo: 4
+    inputDataFrame: Filter_1
+    renameColumns:
+      col1: col2
+    optional:
+      persistDataFrame: false
+    type: renameColumns
+    sequence: 4
+  - isDynamic: true
+    alias: Refresh_Data_1
+    description: refresh data
+    sequenceNo: 5
+    inputDataFrame: Rename_Columns_1
+    timestampColumn: ts
+    primaryKey:
+      - pk
+    optional:
+      persistDataFrame: false
+    type: refreshData
+    sequence: 5
+  - isDynamic: true
+    alias: Distinct_1
+    description: distinct
+    sequenceNo: 6
+    inputDataFrame: Refresh_Data_1
+    optional:
+      persistDataFrame: false
+    type: distinctDataFrame
+    sequence: 6
+  - isDynamic: true
+    alias: Trim_Data_1
+    description: trim data
+    sequenceNo: 7
+    inputDataFrame: Distinct_1
+    optional:
+      persistDataFrame: false
+    type: trimDataFrame
+    sequence: 7
+  - isDynamic: true
+    alias: Pivot_1
+    description: pivot
+    sequenceNo: 8
+    inputDataFrame: Trim_Data_1
+    pivotKey: pivot
+    groupByColumns:
+      - columnName: asd
+        aliasName: asd
+    aggregateColumns:
+      columnName: sd
+      functionName: Sum
+      aliasName: sdf
+    optional:
+      persistDataFrame: false
+    type: createPivotTable
+    sequence: 8
+  - isDynamic: true
+    alias: Unpivot_1
+    description: sdf
+    sequenceNo: 9
+    inputDataFrame: Pivot_1
+    keyColumns:
+      - dsdf
+    columnsToUnpivot:
+      - ssdf
+    columnNameForNewKey: sdfsdf
+    columnNameForValue: sdf
+    optional:
+      persistDataFrame: false
+    type: unpivotDataFrame
+    sequence: 9
+  - isDynamic: true
+    alias: Text_to_Columns_1
+    description: sdf
+    sequenceNo: 10
+    inputDataFrame: Unpivot_1
+    columnToSplit: sdf
+    splitOperator: sdf
+    optional:
+      persistDataFrame: false
+    type: splitTextToColumns
+    sequence: 10
+  - isDynamic: true
+    alias: Calculated_Column_Concatenate_1
+    description: sdf
+    sequenceNo: 11
+    inputDataFrame: Text_to_Columns_1
+    columnList:
+      - concatColumnList:
+          - s
+        newColumnName: sdf
+        separator: sdf
+    optional:
+      persistDataFrame: false
+    type: calculatedColumnConcatenate
+    sequence: 11
+  - isDynamic: true
+    alias: Calculated_Column_Sub_String_1
+    description: sdf
+    sequenceNo: 12
+    inputDataFrame: Calculated_Column_Concatenate_1
+    columnList:
+      - inputColumnName: dsf
+        newColumnName: sdf
+        startIndex: 1
+        length: 12
+    optional:
+      persistDataFrame: false
+    type: calculatedColumnSubString
+    sequence: 12
+  - isDynamic: true
+    alias: Spark_SQL_1
+    description: dsf
+    sequenceNo: 13
+    inputDataFrameList:
+      - inputDataFrame: Calculated_Column_Sub_String_1
+        tempViewName: sdf
+    query: sdf
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+    sequence: 13
+  - isDynamic: true
+    alias: Order_1
+    description: sdf
+    sequenceNo: 14
+    inputDataFrame: Spark_SQL_1
+    columnList:
+      - columnName: sdf
+        orderBy: ASC
+    optional:
+      persistDataFrame: false
+    type: orderByTransform
+    sequence: 14
+  - isDynamic: true
+    alias: Limit_1
+    description: dsf
+    sequenceNo: 15
+    inputDataFrame: Order_1
+    limitValue: 12
+    optional:
+      persistDataFrame: false
+    type: limitData
+    sequence: 15
+  - isDynamic: true
+    alias: Change_DataType_String_to_Numeric_1
+    description: sdf
+    sequenceNo: 16
+    inputDataFrame: Limit_1
+    listOfColumns:
+      - inputColumnName: sdf
+        outputColumnName: sdf
+        dataType: Float
+        optionalConversion:
+          numberConversionOptions: SAP
+    optional:
+      persistDataFrame: false
+    type: stringToNumericListOfColumns
+    sequence: 16
+  - isDynamic: true
+    alias: Change_DataType_String_to_DateTime_1
+    description: sdf
+    sequenceNo: 17
+    inputDataFrame: Change_DataType_String_to_Numeric_1
+    listOfColumns:
+      - inputColumnName: sdf
+        outputColumnName: sdf
+        dateType: Date
+        optionalConversion:
+          dateConversion: EXCELNUMERICDATE
+    optional:
+      persistDataFrame: false
+    type: stringToDatetimeListOfColumns
+    sequence: 17
+  - isDynamic: true
+    alias: Join_1
+    description: sdf
+    sequenceNo: 18
+    sequence: 18
+    leftDataFrame: Change_DataType_String_to_DateTime_1
+    rightDataFrame: Change_DataType_String_to_Numeric_1
+    joinKeys:
+      - leftKey: sdf
+        rightKey: sdf
+        joinOperator: GEQ
+    joinType: right
+    suffix:
+      leftSuffix: dsf
+      rightSuffix: sdf
+    mismatchDataFrameName: sdf
+    optional:
+      persistDataFrame: false
+    type: joinDataframe
+  - isDynamic: true
+    alias: Calculated_Column_When_1
+    description: sdf
+    sequenceNo: 19
+    inputDataFrame: Join_1
+    calculatedColumns:
+      sdf:
+        - condition: sdf
+          formula: sdf
+          isValue: false
+    optional:
+      persistDataFrame: false
+    type: calculatedColumnCaseWhen
+    sequence: 19
+  - isDynamic: true
+    alias: Refresh_Data_SCD1_1
+    description: sdf
+    sequenceNo: 20
+    existingDataFrame: sdf
+    incrementalDataFrame: Calculated_Column_When_1
+    primaryKey:
+      - d
+    optional:
+      persistDataFrame: false
+      timestampColumn: sdf
+    type: refreshDataSCD1
+    sequence: 20
+  - isDynamic: true
+    alias: SCD_Type_2_Refresh_1
+    description: sdf
+    sequenceNo: 21
+    primaryKey:
+      - s
+    incrementalDataFrame: Calculated_Column_When_1
+    existingDataFrame: Refresh_Data_SCD1_1
+    optional:
+      persistDataFrame: false
+    type: refreshDataSCD2
+    sequence: 21
 controlPort:
   dataQualityRules:
     RecordCountCheck:
