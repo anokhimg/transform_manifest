@@ -4,7 +4,7 @@ jobName: Filter Test
 jobType: Source Aligned Data Product
 alias: load_data_to_mysql_for_filter
 discoveryPort:
-  name: Filter Test
+  name: Filter Test 1
 inputPorts:
   - alias: Test_Data_Set_1
     isDynamic: true
