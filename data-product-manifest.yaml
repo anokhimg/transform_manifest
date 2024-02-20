@@ -2,7 +2,7 @@ version: 0.0.1
 jobId: "301"
 jobName: Filter Test
 jobType: Source Aligned Data Product
-alias: load_data_to_mysql_for_filter
+alias: load_data_to_mysql_for_filter_1
 discoveryPort:
   name: Filter Test 1
 inputPorts:
